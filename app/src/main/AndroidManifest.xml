@@ -19,7 +19,10 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".AlertReceiver"/>
+        <receiver
+            android:name=".AlertReceiver"
+            android:process=":remote">
+        </receiver>
     </application>
 
 </manifest>

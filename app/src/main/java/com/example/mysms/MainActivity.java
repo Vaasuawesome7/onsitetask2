@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements TimePickerDialog.
         intent.putExtra("msg", message);
         System.out.println(phoneNumber);
         System.out.println(message);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 1, intent, 0);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
     }
 }
