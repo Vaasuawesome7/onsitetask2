@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity implements TimePickerDialog.
     private TextView time;
     private final int REQ_CODE = 1;
     private Calendar c;
+    private int mHour, mMin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,10 +63,8 @@ public class MainActivity extends AppCompatActivity implements TimePickerDialog.
             text = "The message will be sent at: 0" + hourOfDay + " hour(s)" + ": " + minute + " minute(s)";
 
         time.setText(text);
-
-        c.set(Calendar.HOUR_OF_DAY, hourOfDay);
-        c.set(Calendar.MINUTE, minute);
-        c.set(Calendar.SECOND, 0);
+        mHour = hourOfDay;
+        mMin = minute;
     }
 
     public boolean checkPermission(String perm) {
@@ -92,13 +91,11 @@ public class MainActivity extends AppCompatActivity implements TimePickerDialog.
     public void confirm(View view) {
         String phoneNumber = ph.getText().toString();
         String message = msg.getText().toString();
-        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(this, AlertReceiver.class);
-        intent.putExtra("ph", phoneNumber);
-        intent.putExtra("msg", message);
-        System.out.println(phoneNumber);
-        System.out.println(message);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        alarmManager.setExact(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
+        Intent service = new Intent(this, MyService.class);
+        service.putExtra("ph", phoneNumber);
+        service.putExtra("msg", message);
+        service.putExtra("hr", mHour);
+        service.putExtra("min", mMin);
+        startService(service);
     }
 }
