@@ -37,6 +37,7 @@ public class AlertReceiver extends BroadcastReceiver {
         else {
             Toast.makeText(context, "Message not sent :(", Toast.LENGTH_SHORT).show();
         }
+
     }
 
     public boolean checkPermission(String perm, Context context) {

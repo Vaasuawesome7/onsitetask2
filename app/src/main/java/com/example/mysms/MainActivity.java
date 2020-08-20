@@ -42,6 +42,15 @@ public class MainActivity extends AppCompatActivity implements TimePickerDialog.
         time = findViewById(R.id.time_text);
         c = Calendar.getInstance();
 
+        if (getIntent().getExtras() != null) {
+            String ph1 = getIntent().getExtras().getString("ph");
+            String msg1 = getIntent().getExtras().getString("msg");
+            int h = getIntent().getExtras().getInt("h");
+            int m = getIntent().getExtras().getInt("m");
+            setMainText(h, m);
+            ph.setText(ph1);
+            msg.setText(msg1);
+        }
         if (!checkPermission(Manifest.permission.SEND_SMS)) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SEND_SMS}, REQ_CODE);
         }
@@ -55,14 +64,7 @@ public class MainActivity extends AppCompatActivity implements TimePickerDialog.
 
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-        String text = "The message will be sent at: " + hourOfDay + " hour(s)" + ": " + minute + " minute(s)";
-        if (minute<10)
-            text = "The message will be sent at: " + hourOfDay + " hour(s)" + ": 0" + minute + " minute(s)";
-
-        if (hourOfDay<10)
-            text = "The message will be sent at: 0" + hourOfDay + " hour(s)" + ": " + minute + " minute(s)";
-
-        time.setText(text);
+        setMainText(hourOfDay, minute);
         mHour = hourOfDay;
         mMin = minute;
     }
@@ -97,5 +99,16 @@ public class MainActivity extends AppCompatActivity implements TimePickerDialog.
         service.putExtra("hr", mHour);
         service.putExtra("min", mMin);
         startService(service);
+    }
+
+    public void setMainText(int h, int m) {
+        String text = "The message will be sent at: " + h + " hour(s)" + ": " + m + " minute(s)";
+        if (m<10)
+            text = "The message will be sent at: " + h + " hour(s)" + ": 0" + m + " minute(s)";
+
+        if (h<10)
+            text = "The message will be sent at: 0" + h + " hour(s)" + ": " + m + " minute(s)";
+
+        time.setText(text);
     }
 }
